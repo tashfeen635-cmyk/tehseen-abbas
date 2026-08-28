@@ -1,0 +1,1478 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Johndon Bonsen - Profile</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;700&family=Open+Sans:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary: #2c9cf5;
+        --primary-dark: #1a8de6;
+        --dark: #333;
+        --gray: #777;
+        --light-bg: #f5f5f5;
+        --white: #fff;
+        --sidebar-width: 280px;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: "Open Sans", sans-serif;
+        color: var(--dark);
+        background: var(--white);
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: "Oswald", sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: var(--sidebar-width);
+        height: 100vh;
+        background: var(--primary);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 60px;
+        z-index: 1000;
+        transition: transform 0.3s ease;
+      }
+      .profile-img {
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        overflow: hidden;
+        margin-bottom: 50px;
+      }
+      .profile-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .nav-menu {
+        list-style: none;
+        width: 100%;
+        text-align: center;
+      }
+      .nav-menu li {
+        margin: 25px 0;
+      }
+      .nav-menu a {
+        text-decoration: none;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: color 0.3s;
+      }
+      .nav-menu a:hover,
+      .nav-menu a.active {
+        color: var(--white);
+      }
+      .main-content {
+        margin-left: var(--sidebar-width);
+        min-height: 100vh;
+      }
+      .hero {
+        position: relative;
+        height: 100vh;
+        min-height: 700px;
+        background:
+          linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0.96) 0%,
+            rgba(255, 255, 255, 0.92) 45%,
+            rgba(255, 255, 255, 0.5) 70%,
+            transparent 100%
+          ),
+          url("logo/tehseen-abbas.jpg");
+        background-size: cover;
+        background-position: center right;
+        display: flex;
+        align-items: center;
+        padding: 0 80px;
+      }
+      .hero-content {
+        max-width: 600px;
+        position: relative;
+        z-index: 2;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+        margin-left: 100px;
+      }
+      .logo-icon {
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+      .logo-icon svg {
+        width: 38px;
+        height: 38px;
+      }
+      .logo-text {
+        font-family: "Oswald", sans-serif;
+        font-size: 44px;
+        color: var(--primary);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .hero h1 {
+        font-size: 76px;
+        line-height: 1.05;
+        margin-bottom: 12px;
+        color: #FF6500;
+        font-weight: 700;
+      }
+      .hero h1 span {
+        color: var(--primary);
+      }
+      .hero-subtitle {
+        font-family: "Oswald", sans-serif;
+        font-size: 17px;
+        color: var(--gray);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 35px;
+      }
+      .hero-subtitle a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .hero-desc {
+        color: var(--gray);
+        font-size: 15px;
+        line-height: 1.8;
+        margin-bottom: 45px;
+        max-width: 520px;
+      }
+      .social-icons {
+        display: flex;
+        gap: 15px;
+      }
+      .social-icons a {
+        width: 45px;
+        height: 45px;
+        background: #333;
+        color: var(--white);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: background 0.3s;
+        font-size: 16px;
+      }
+      .social-icons a:hover {
+        background: var(--primary);
+      }
+      .section {
+        padding: 90px 60px;
+      }
+      .section-title {
+        text-align: center;
+        font-size: 44px;
+        margin-bottom: 60px;
+        position: relative;
+        padding-bottom: 20px;
+        color: var(--dark);
+        font-weight: 700;
+      }
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50px;
+        height: 4px;
+        background: var(--primary);
+      }
+      .experience {
+        background: var(--light-bg);
+      }
+      .exp-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .exp-card {
+        background: var(--white);
+        padding: 35px 30px 25px;
+        border-radius: 3px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        position: relative;
+        overflow: hidden;
+        transition:
+          transform 0.3s,
+          box-shadow 0.3s;
+      }
+      .exp-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+      .exp-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+      }
+      .exp-card.cyan::before {
+        background: #00bcd4;
+      }
+      .exp-card.yellow::before {
+        background: #ffc107;
+      }
+      .exp-card.green::before {
+        background: #4caf50;
+      }
+      .exp-card.blue::before {
+        background: var(--primary);
+      }
+      .exp-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+      .exp-header i {
+        font-size: 20px;
+        width: 24px;
+        text-align: center;
+      }
+      .exp-card.cyan .exp-header i {
+        color: #00bcd4;
+      }
+      .exp-card.yellow .exp-header i {
+        color: #ffc107;
+      }
+      .exp-card.green .exp-header i {
+        color: #4caf50;
+      }
+      .exp-card.blue .exp-header i {
+        color: var(--primary);
+      }
+      .exp-header h3 {
+        font-size: 22px;
+        font-weight: 600;
+        text-transform: none;
+        color: var(--dark);
+        font-family: "Open Sans", sans-serif;
+      }
+      .exp-card p {
+        color: var(--gray);
+        font-size: 14px;
+        line-height: 1.8;
+        margin-bottom: 20px;
+      }
+      .exp-date {
+        text-align: right;
+        color: var(--primary);
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .portfolio {
+        background: var(--white);
+      }
+      .filter-menu {
+        text-align: center;
+        margin-bottom: 45px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .filter-btn {
+        padding: 10px 28px;
+        border: 1px solid var(--primary);
+        background: transparent;
+        color: var(--primary);
+        font-family: "Oswald", sans-serif;
+        text-transform: uppercase;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s;
+        letter-spacing: 1px;
+        font-weight: 400;
+      }
+      .filter-btn:hover,
+      .filter-btn.active {
+        background: var(--primary);
+        color: var(--white);
+      }
+      .portfolio-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .portfolio-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 2px;
+        cursor: pointer;
+        aspect-ratio: 4/3;
+      }
+      .portfolio-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s;
+      }
+      .portfolio-item:hover img {
+        transform: scale(1.1);
+      }
+      .portfolio-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(44, 156, 245, 0.85);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.4s;
+      }
+      .portfolio-item:hover .portfolio-overlay {
+        opacity: 1;
+      }
+      .portfolio-overlay i {
+        color: var(--white);
+        font-size: 20px;
+        width: 50px;
+        height: 50px;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .portfolio-item.hidden {
+        display: none;
+      }
+      .skills {
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
+          url("https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1600&q=80");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        color: var(--white);
+      }
+      .skills .section-title {
+        color: var(--white);
+      }
+      .skills .section-title::after {
+        display: none;
+      }
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .skill-card {
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(4px);
+        padding: 45px 20px 35px;
+        text-align: center;
+        border-radius: 3px;
+        transition:
+          transform 0.3s,
+          background 0.3s;
+      }
+      .skill-card:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .skill-icon {
+        font-size: 52px;
+        color: var(--primary);
+        margin-bottom: 18px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .skill-percent {
+        font-family: "Oswald", sans-serif;
+        font-size: 38px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        line-height: 1;
+      }
+      .skill-name {
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: rgba(255, 255, 255, 0.85);
+        font-weight: 300;
+      }
+      .awards {
+        background: var(--light-bg);
+        padding-bottom: 100px;
+      }
+      .timeline {
+        max-width: 900px;
+        margin: 0 auto;
+        position: relative;
+      }
+      .timeline-line {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: #ccc;
+        transform: translateX(-50%);
+      }
+      .timeline-item {
+        display: flex;
+        justify-content: flex-end;
+        padding-right: 50px;
+        position: relative;
+        width: 50%;
+        margin-bottom: 50px;
+      }
+      .timeline-item:nth-child(even) {
+        justify-content: flex-start;
+        padding-left: 50px;
+        padding-right: 0;
+        margin-left: 50%;
+        margin-bottom: 0;
+      }
+      .timeline-dot {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        background: var(--white);
+        border: 2px solid var(--primary);
+        transform: rotate(45deg);
+        right: -9px;
+        top: 25px;
+        z-index: 2;
+      }
+      .timeline-item:nth-child(even) .timeline-dot {
+        left: -9px;
+        right: auto;
+      }
+      .timeline-connector {
+        position: absolute;
+        width: 38px;
+        height: 1px;
+        background: #ccc;
+        right: 10px;
+        top: 32px;
+      }
+      .timeline-item:nth-child(even) .timeline-connector {
+        left: 10px;
+        right: auto;
+      }
+      .timeline-card {
+        background: var(--white);
+        padding: 28px 32px;
+        border-radius: 3px;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        text-align: center;
+        position: relative;
+        width: 100%;
+      }
+      .timeline-date {
+        color: var(--primary);
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+      .timeline-card h4 {
+        font-size: 16px;
+        margin-bottom: 12px;
+        color: var(--dark);
+        font-weight: 700;
+      }
+      .timeline-card p {
+        color: var(--gray);
+        font-size: 14px;
+        line-height: 1.7;
+      }
+      .contact-section {
+        background: var(--white);
+        padding: 90px 60px 0;
+      }
+      .contact-wrapper {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        gap: 60px;
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .contact-left h2 {
+        font-size: 38px;
+        margin-bottom: 18px;
+        text-align: left;
+        font-weight: 700;
+        padding-bottom: 0;
+      }
+      .contact-left h2::after {
+        display: none;
+      }
+      .contact-left > p {
+        color: var(--gray);
+        font-size: 14px;
+        line-height: 1.8;
+        margin-bottom: 35px;
+      }
+      .form-group {
+        margin-bottom: 18px;
+      }
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 14px 18px;
+        border: 1px solid #e0e0e0;
+        font-family: "Open Sans", sans-serif;
+        font-size: 14px;
+        color: var(--dark);
+        transition: border-color 0.3s;
+      }
+      .form-group input:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
+      .form-group textarea {
+        resize: vertical;
+        min-height: 120px;
+      }
+      .btn-send {
+        background: var(--primary);
+        color: var(--white);
+        border: none;
+        padding: 12px 32px;
+        font-family: "Oswald", sans-serif;
+        text-transform: uppercase;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.3s;
+        letter-spacing: 1px;
+        margin-top: 5px;
+      }
+      .btn-send:hover {
+        background: var(--primary-dark);
+      }
+      .contact-info-item {
+        display: flex;
+        gap: 18px;
+        margin-bottom: 35px;
+      }
+      .contact-info-item i {
+        font-size: 38px;
+        color: var(--primary);
+        width: 40px;
+        text-align: center;
+        margin-top: 5px;
+      }
+      .contact-info-item h4 {
+        font-size: 20px;
+        margin-bottom: 6px;
+        color: var(--dark);
+        font-weight: 700;
+      }
+      .contact-info-item p {
+        color: var(--gray);
+        font-size: 14px;
+        line-height: 1.6;
+      }
+      .contact-social {
+        display: flex;
+        gap: 12px;
+        margin-top: 25px;
+      }
+      .contact-social a {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 14px;
+        transition: transform 0.3s;
+      }
+      .contact-social a:hover {
+        transform: scale(1.1);
+      }
+      .contact-social .fb {
+        background: #3b5998;
+        color: white;
+      }
+      .contact-social .tw {
+        background: #55acee;
+        color: white;
+      }
+      .contact-social .gp {
+        background: #dd4b39;
+        color: white;
+      }
+      .map-wrapper {
+        margin-left: -60px;
+        margin-right: -60px;
+        margin-top: 60px;
+        height: 400px;
+        position: relative;
+      }
+      .map-wrapper iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        filter: grayscale(30%);
+      }
+      .mobile-toggle {
+        display: none;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1100;
+        background: var(--primary);
+        color: white;
+        border: none;
+        width: 45px;
+        height: 45px;
+        border-radius: 4px;
+        font-size: 20px;
+        cursor: pointer;
+      }
+      .reveal {
+        opacity: 0;
+        transform: translateY(40px);
+        transition:
+          opacity 0.8s ease,
+          transform 0.8s ease;
+      }
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      @media (max-width: 1024px) {
+        .sidebar {
+          transform: translateX(-100%);
+        }
+        .sidebar.open {
+          transform: translateX(0);
+        }
+        .main-content {
+          margin-left: 0;
+        }
+        .mobile-toggle {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .hero {
+          padding: 0 40px;
+        }
+        .hero h1 {
+          font-size: 52px;
+        }
+        .section {
+          padding: 60px 30px;
+        }
+        .portfolio-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .skills-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .contact-wrapper {
+          grid-template-columns: 1fr;
+        }
+        .contact-section {
+          padding: 60px 30px 0;
+        }
+        .map-wrapper {
+          margin-left: -30px;
+          margin-right: -30px;
+        }
+      }
+      @media (max-width: 768px) {
+        .hero {
+          padding: 0 25px;
+          min-height: 600px;
+        }
+        .hero h1 {
+          font-size: 40px;
+        }
+        .exp-grid {
+          grid-template-columns: 1fr;
+        }
+        .portfolio-grid {
+          grid-template-columns: 1fr;
+        }
+        .skills-grid {
+          grid-template-columns: 1fr;
+        }
+        .timeline-item,
+        .timeline-item:nth-child(even) {
+          width: 100%;
+          margin-left: 0;
+          padding-left: 40px;
+          padding-right: 0;
+          justify-content: flex-start;
+        }
+        .timeline-line {
+          left: 15px;
+        }
+        .timeline-dot,
+        .timeline-item:nth-child(even) .timeline-dot {
+          left: 7px;
+          right: auto;
+        }
+        .timeline-connector,
+        .timeline-item:nth-child(even) .timeline-connector {
+          left: 20px;
+          right: auto;
+          width: 15px;
+        }
+      }
+    </style>
+    <base target="_blank" />
+  </head>
+  <body>
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <aside class="sidebar" id="sidebar">
+      <div class="profile-img">
+        <img src="logo/tehseen-abbas.jpg" alt="Johndon Bonsen" />
+      </div>
+      <ul class="nav-menu">
+        <li><a href="#about" class="active">About</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#awards">Awards</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <section class="hero" id="about">
+        <div class="hero-content">
+          <div class="logo">
+            <div class="logo-icon">
+              <img src="logo/logo.png" width="100px" alt="" />
+            </div>
+            <span class="logo-text">BINARY-HUB</span>
+          </div>
+          <h1>TEHSEEN <span> ABBAS</span></h1>
+          <p class="hero-subtitle">
+            The next big idea is waiting for its next big changer with
+            <a href="#">Themsbit</a>
+          </p>
+          <p class="hero-desc">
+            I am experienced in leveraging agile frameworks to provide a robust
+            synopsis for high level overviews. Iterative approaches to corporate
+            strategy foster collaborative thinking to further the overall value
+            proposition.
+          </p>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section experience" id="experience">
+        <h2 class="section-title reveal">Experience</h2>
+        <div class="exp-grid">
+          <div class="exp-card cyan reveal">
+            <div class="exp-header">
+              <i class="fas fa-globe-americas"></i>
+              <h3>Senior Web Developer</h3>
+            </div>
+            <p>
+              Capitalize on low hanging fruit to identify a ballpark value added
+              activity to beta test. Override the digital divide with additional
+              clickthroughs from DevOps. Nanotechnology immersion along the
+              information highway will close the loop on focusing solely on the
+              bottom line.
+            </p>
+            <div class="exp-date">March 2019 - Present</div>
+          </div>
+          <div class="exp-card yellow reveal">
+            <div class="exp-header">
+              <i class="fas fa-laptop-code"></i>
+              <h3>Web Developer</h3>
+            </div>
+            <p>
+              Capitalize on low hanging fruit to identify a ballpark value added
+              activity to beta test. Override the digital divide with additional
+              clickthroughs from DevOps. Nanotechnology immersion along the
+              information highway will close the loop on focusing solely on the
+              bottom line.
+            </p>
+            <div class="exp-date">December 2018 - March 2019</div>
+          </div>
+          <div class="exp-card green reveal">
+            <div class="exp-header">
+              <i class="fas fa-camera"></i>
+              <h3>Junior Web Designer</h3>
+            </div>
+            <p>
+              Capitalize on low hanging fruit to identify a ballpark value added
+              activity to beta test. Override the digital divide with additional
+              clickthroughs from DevOps. Nanotechnology immersion along the
+              information highway will close the loop on focusing solely on the
+              bottom line.
+            </p>
+            <div class="exp-date">July 2017 - December 2018</div>
+          </div>
+          <div class="exp-card blue reveal">
+            <div class="exp-header">
+              <i class="fas fa-mountain"></i>
+              <h3>Web Design Intern</h3>
+            </div>
+            <p>
+              Capitalize on low hanging fruit to identify a ballpark value added
+              activity to beta test. Override the digital divide with additional
+              clickthroughs from DevOps. Nanotechnology immersion along the
+              information highway will close the loop on focusing solely on the
+              bottom line.
+            </p>
+            <div class="exp-date">September 2018 - June 2019</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section portfolio" id="portfolio">
+        <h2 class="section-title reveal">Portfolio</h2>
+        <div class="filter-menu reveal">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="distinguished">
+            DISTINGUISHED PERSONALITIES
+          </button>
+          <button class="filter-btn" data-filter="travel">
+            TRAVEL & ADVENTURE
+          </button>
+          <button class="filter-btn" data-filter="team">TEAM</button>
+          <button class="filter-btn" data-filter="sports">SPORTS</button>
+          <button class="filter-btn" data-filter="personal">PERSONAL</button>
+        </div>
+        <div class="portfolio-grid">
+          <div class="portfolio-item reveal" data-category="distinguished">
+            <img
+              src="images/DISTINGUISHED%20PERSONALITIES/773183475_18003584951976647_9000418675402898133_n.jpg"
+              alt="Distinguished Personalities"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="distinguished">
+            <img
+              src="images/DISTINGUISHED%20PERSONALITIES/731058990_17996813630976647_2500874218625038499_n.jpg"
+              alt="Distinguished Personalities"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="distinguished">
+            <img
+              src="images/DISTINGUISHED%20PERSONALITIES/728226015_17995881590976647_6915420324737538279_n.jpg"
+              alt="Distinguished Personalities"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="distinguished">
+            <img
+              src="images/DISTINGUISHED%20PERSONALITIES/700927965_17990456933976647_9085498740804261657_n.jpg"
+              alt="Distinguished Personalities"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="distinguished">
+            <img
+              src="images/DISTINGUISHED%20PERSONALITIES/701480525_17990314994976647_6702508317479498259_n.jpg"
+              alt="Distinguished Personalities"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="distinguished">
+            <img
+              src="images/DISTINGUISHED%20PERSONALITIES/658912534_17983357403976647_1311052607922962432_n.jpg"
+              alt="Distinguished Personalities"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="distinguished">
+            <img
+              src="images/DISTINGUISHED%20PERSONALITIES/657294593_17983300424976647_8897700467822790328_n.jpg"
+              alt="Distinguished Personalities"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="distinguished">
+            <img
+              src="images/DISTINGUISHED%20PERSONALITIES/657933458_17983644296976647_1808061565692815084_n.jpg"
+              alt="Distinguished Personalities"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="distinguished">
+            <img
+              src="images/DISTINGUISHED%20PERSONALITIES/656749797_17983579529976647_4448415742232967921_n.jpg"
+              alt="Distinguished Personalities"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="distinguished">
+            <img
+              src="images/DISTINGUISHED%20PERSONALITIES/656697006_17983589126976647_6224741079110277700_n.jpg"
+              alt="Distinguished Personalities"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="distinguished">
+            <img
+              src="images/DISTINGUISHED%20PERSONALITIES/656779240_17983577960976647_803851025512828360_n.jpg"
+              alt="Distinguished Personalities"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="distinguished">
+            <img
+              src="images/DISTINGUISHED%20PERSONALITIES/656605038_17983530602976647_5635407978525059783_n.jpg"
+              alt="Distinguished Personalities"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="distinguished">
+            <img
+              src="images/DISTINGUISHED%20PERSONALITIES/656179648_17983530044976647_7276940643609626946_n.jpg"
+              alt="Distinguished Personalities"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="distinguished">
+            <img
+              src="images/DISTINGUISHED%20PERSONALITIES/656788932_17983337492976647_4588445852736754145_n.jpg"
+              alt="Distinguished Personalities"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="distinguished">
+            <img
+              src="images/DISTINGUISHED%20PERSONALITIES/658146080_17983579106976647_6339761768212488224_n.jpg"
+              alt="Distinguished Personalities"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="distinguished">
+            <img
+              src="images/DISTINGUISHED%20PERSONALITIES/657331030_17983422320976647_6312776095443602490_n.jpg"
+              alt="Distinguished Personalities"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="travel">
+            <img
+              src="images/TRAVEL%20%26%20ADVENTURE/726758649_17994978683976647_1782722879211471899_n.jpg"
+              alt="Travel & Adventure"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="travel">
+            <img
+              src="images/TRAVEL%20%26%20ADVENTURE/725838338_17994978656976647_5797025979349924269_n.jpg"
+              alt="Travel & Adventure"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="travel">
+            <img
+              src="images/TRAVEL%20%26%20ADVENTURE/708715268_17992101821976647_2336239473878652875_n.jpg"
+              alt="Travel & Adventure"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="travel">
+            <img
+              src="images/TRAVEL%20%26%20ADVENTURE/706733975_17991807932976647_5877853629483037639_n.jpg"
+              alt="Travel & Adventure"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="travel">
+            <img
+              src="images/TRAVEL%20%26%20ADVENTURE/698324910_17989675469976647_2645207370473847840_n.jpg"
+              alt="Travel & Adventure"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="travel">
+            <img
+              src="images/TRAVEL%20%26%20ADVENTURE/694150529_17989803188976647_162402531827969174_n.jpg"
+              alt="Travel & Adventure"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="travel">
+            <img
+              src="images/TRAVEL%20%26%20ADVENTURE/688606602_17989668950976647_7735390923436642496_n.jpg"
+              alt="Travel & Adventure"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="travel">
+            <img
+              src="images/TRAVEL%20%26%20ADVENTURE/657737655_17983588667976647_2202782058881974177_n.jpg"
+              alt="Travel & Adventure"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="team">
+            <img
+              src="images/TEAM/706473987_17991709445976647_2222518291370409520_n.jpg"
+              alt="Team"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="team">
+            <img
+              src="images/TEAM/689523869_17989670198976647_4277370298526968262_n.jpg"
+              alt="Team"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="team">
+            <img
+              src="images/TEAM/657607747_17983645895976647_2536671168045853121_n.jpg"
+              alt="Team"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="sports">
+            <img
+              src="images/Sports/657625661_17983639586976647_305302031067389097_n.jpg"
+              alt="Sports"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="sports">
+            <img
+              src="images/Sports/657612357_17983294712976647_4061871797618123626_n.jpg"
+              alt="Sports"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="sports">
+            <img
+              src="images/Sports/655852397_17983382774976647_1141915102822669881_n.jpg"
+              alt="Sports"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="personal">
+            <img
+              src="images/Personal/660026014_17984237000976647_3032731924731393406_n.jpg"
+              alt="Personal"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="personal">
+            <img
+              src="images/Personal/659092962_17983647128976647_7095962795408633559_n.jpg"
+              alt="Personal"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="personal">
+            <img
+              src="images/Personal/658981703_17983644395976647_8178421621265785308_n.jpg"
+              alt="Personal"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="personal">
+            <img
+              src="images/Personal/657053358_17983647377976647_3991154338766336487_n.jpg"
+              alt="Personal"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="personal">
+            <img
+              src="images/Personal/785943831_18005975300976647_6582758928697910577_n.jpg"
+              alt="Personal"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="personal">
+            <img
+              src="images/Personal/751335776_17999794772976647_4326556236583399934_n.jpg"
+              alt="Personal"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="personal">
+            <img
+              src="images/Personal/731808330_17997273098976647_7602967968953208447_n.jpg"
+              alt="Personal"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="personal">
+            <img
+              src="images/Personal/725518652_17994963812976647_6375784195393731370_n.jpg"
+              alt="Personal"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="personal">
+            <img
+              src="images/Personal/711209762_17992103555976647_5960367477054404864_n.jpg"
+              alt="Personal"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="personal">
+            <img
+              src="images/Personal/707561420_17991708050976647_8384580629681742274_n.jpg"
+              alt="Personal"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+          <div class="portfolio-item reveal" data-category="personal">
+            <img
+              src="images/Personal/707378177_17992103564976647_7793417630605698761_n.jpg"
+              alt="Personal"
+            />
+            <div class="portfolio-overlay">
+              <i class="fas fa-search-plus"></i>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section skills" id="skills">
+        <h2 class="section-title reveal">Coding Skills</h2>
+        <div class="skills-grid">
+          <div class="skill-card reveal" data-target="84">
+            <div class="skill-icon"><i class="fab fa-html5"></i></div>
+            <div class="skill-percent">0%</div>
+            <div class="skill-name">HTML5</div>
+          </div>
+          <div class="skill-card reveal" data-target="95">
+            <div class="skill-icon"><i class="fab fa-css3-alt"></i></div>
+            <div class="skill-percent">0%</div>
+            <div class="skill-name">CSS3</div>
+          </div>
+          <div class="skill-card reveal" data-target="65">
+            <div class="skill-icon"><i class="fas fa-code"></i></div>
+            <div class="skill-percent">0%</div>
+            <div class="skill-name">JQuery</div>
+          </div>
+          <div class="skill-card reveal" data-target="89">
+            <div class="skill-icon"><i class="fab fa-php"></i></div>
+            <div class="skill-percent">0%</div>
+            <div class="skill-name">PHP</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section awards" id="awards">
+        <h2 class="section-title reveal">Awards</h2>
+        <div class="timeline">
+          <div class="timeline-line"></div>
+          <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-connector"></div>
+            <div class="timeline-card">
+              <div class="timeline-date">Apr 2017 - Mar 2018</div>
+              <h4>Google Analytics Certified Developer</h4>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Vestibulum mattis felis vitae risus pulvinar tincidunt. Nam ac
+                venenatis enim. Aenean hendrerit justo sed.
+              </p>
+            </div>
+          </div>
+          <div class="timeline-item reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-connector"></div>
+            <div class="timeline-card">
+              <div class="timeline-date">Apr 2018 - Mar 2019</div>
+              <h4>Mobile Web Specialist - Google Certification</h4>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Vestibulum mattis felis vitae risus pulvinar tincidunt. Nam ac
+                venenatis enim. Aenean hendrerit justo sed.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact-section" id="contact">
+        <div class="contact-wrapper">
+          <div class="contact-left reveal">
+            <h2>Contact Us</h2>
+            <p>
+              It is a long established fact that a reader will be distracted by
+              the readable content of a page when looking at its layout. The
+              point of using Lorem Ipsum is that it has a more-or-less normal
+              distribution of letters, as opposed to using Content here.
+            </p>
+            <form>
+              <div class="form-group">
+                <input type="text" placeholder="Full Name" required />
+              </div>
+              <div class="form-group">
+                <input type="email" placeholder="Email Id" required />
+              </div>
+              <div class="form-group">
+                <input type="text" placeholder="Subject" required />
+              </div>
+              <div class="form-group">
+                <textarea placeholder="Your Message" required></textarea>
+              </div>
+              <button type="submit" class="btn-send">Send</button>
+            </form>
+          </div>
+          <div class="contact-right reveal">
+            <div class="contact-info-item">
+              <i class="fas fa-map-marker-alt"></i>
+              <div>
+                <h4>Address</h4>
+                <p>25, Dist town Street, Logn<br />California, US</p>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <i class="fas fa-phone"></i>
+              <div>
+                <h4>Phone</h4>
+                <p>800 123 3456<br />900 123 3457</p>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <i class="fas fa-envelope"></i>
+              <div>
+                <h4>Email</h4>
+                <p>Fax: 800 123 3456<br />Email: info@themsbit.com</p>
+              </div>
+            </div>
+            <div class="contact-social">
+              <a href="#" class="fb"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="tw"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="gp"><i class="fab fa-google-plus-g"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="map-wrapper">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d58368.8038862775!2d-111.38002865!3d26.01184095!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86baf4f7b9f9e1c1%3A0x3e2e5c5f5b5e5e5e!2sLoreto%2C%20Baja%20California%20Sur%2C%20Mexico!5e0!3m2!1sen!2sus!4v1600000000000!5m2!1sen!2sus"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      function toggleSidebar() {
+        document.getElementById("sidebar").classList.toggle("open");
+      }
+
+      // Portfolio Filter
+      document.querySelectorAll(".filter-btn").forEach((btn) => {
+        btn.addEventListener("click", function () {
+          document
+            .querySelectorAll(".filter-btn")
+            .forEach((b) => b.classList.remove("active"));
+          this.classList.add("active");
+          const filter = this.dataset.filter;
+          document.querySelectorAll(".portfolio-item").forEach((item) => {
+            if (filter === "all" || item.dataset.category === filter) {
+              item.classList.remove("hidden");
+              setTimeout(() => {
+                item.style.opacity = "1";
+                item.style.transform = "scale(1)";
+              }, 10);
+            } else {
+              item.style.opacity = "0";
+              item.style.transform = "scale(0.8)";
+              setTimeout(() => item.classList.add("hidden"), 300);
+            }
+          });
+        });
+      });
+
+      // Scroll Reveal
+      const revealElements = document.querySelectorAll(".reveal");
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("active");
+              // Animate skill counters
+              const skillCard = entry.target.closest(".skill-card");
+              if (skillCard && !skillCard.classList.contains("counted")) {
+                skillCard.classList.add("counted");
+                const target = parseInt(skillCard.dataset.target);
+                const percentEl = skillCard.querySelector(".skill-percent");
+                let current = 0;
+                const increment = target / 60;
+                const timer = setInterval(() => {
+                  current += increment;
+                  if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                  }
+                  percentEl.textContent = Math.floor(current) + "%";
+                }, 25);
+              }
+            }
+          });
+        },
+        { threshold: 0.15 },
+      );
+      revealElements.forEach((el) => revealObserver.observe(el));
+
+      // Active Nav on Scroll
+      const sections = document.querySelectorAll("section[id]");
+      const navLinks = document.querySelectorAll(".nav-menu a");
+      window.addEventListener("scroll", () => {
+        let current = "";
+        sections.forEach((section) => {
+          const sectionTop = section.offsetTop;
+          if (scrollY >= sectionTop - 200) current = section.getAttribute("id");
+        });
+        navLinks.forEach((link) => {
+          link.classList.remove("active");
+          if (link.getAttribute("href") === "#" + current)
+            link.classList.add("active");
+        });
+      });
+    </script>
+  </body>
+</html>
