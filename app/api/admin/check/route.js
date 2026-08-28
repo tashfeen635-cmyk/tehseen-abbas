@@ -8,6 +8,6 @@ export async function GET() {
   const authed = await isAuthenticated();
   return NextResponse.json({
     authenticated: authed,
-    username: authed ? getSetting("adminUsername") || "admin" : null,
+    username: authed ? (await getSetting("adminUsername")) || "admin" : null,
   });
 }
