@@ -480,6 +480,8 @@ function SettingsTab() {
       });
       setPass({ current: "", next: "" });
       setMsg("Password changed.");
+    } catch (err) {
+      setMsg(`Error: ${err.message}`);
     } finally {
       setBusy(false);
     }
