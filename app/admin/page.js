@@ -4,13 +4,14 @@ import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 
 const CATEGORY_OPTIONS = [
-  { value: "distinguished", label: "DISTINGUISHED PERSONALITIES" },
-  { value: "travel", label: "TRAVEL & ADVENTURE" },
-  { value: "team", label: "TEAM" },
-  { value: "sports", label: "SPORTS" },
-  { value: "personal", label: "PERSONAL" },
-  { value: "awardsReceived", label: "AWARDS RECEIVED" },
-  { value: "awardsPresented", label: "AWARDS PRESENTED" },
+  { value: "all", label: "All" },
+  { value: "distinguished", label: "Distinguished Personalities" },
+  { value: "travel", label: "Travel & Adventure" },
+  { value: "team", label: "Team" },
+  { value: "sports", label: "Sports" },
+  { value: "personal", label: "Personal" },
+  { value: "awardsReceived", label: "Awards Received" },
+  { value: "awardsPresented", label: "Awards" },
 ];
 
 const TABS = ["Dashboard", "Portfolio", "Experience", "Skills", "Awards", "Settings"];
