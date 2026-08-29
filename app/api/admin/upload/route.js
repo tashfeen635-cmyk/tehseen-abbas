@@ -21,6 +21,13 @@ export async function POST(req) {
     return NextResponse.json({ url: blob.url });
   }
 
+  if (process.env.NODE_ENV === "production") {
+    return NextResponse.json(
+      { error: "Image storage is not configured. Connect a Vercel Blob store (BLOB_READ_WRITE_TOKEN) and redeploy." },
+      { status: 503 }
+    );
+  }
+
   const uploadsDir = path.join(process.cwd(), "public", "uploads");
   if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
   const buffer = Buffer.from(await file.arrayBuffer());
