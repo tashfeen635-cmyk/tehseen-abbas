@@ -41,15 +41,6 @@ const DEFAULT_SETTINGS = {
   brandText: "BINARY-HUB",
 };
 
-function parseSocial(raw, fallback) {
-  try {
-    const obj = raw ? JSON.parse(raw) : {};
-    return { facebook: "#", twitter: "#", linkedin: "#", github: "#", ...obj };
-  } catch {
-    return fallback;
-  }
-}
-
 function splitLines(v) {
   return v ? String(v).split("\n") : [""];
 }
@@ -69,13 +60,13 @@ export default function Home() {
   const experience = data?.experience || [];
   const skills = data?.skills || [];
   const awards = data?.awards || [];
-  const settings = { ...DEFAULT_SETTINGS, ...(data?.settings || {}) };
-  const social = parseSocial(data?.settings?.social, {
+  const settings = DEFAULT_SETTINGS;
+  const social = {
     facebook: "#",
     twitter: "#",
     linkedin: "#",
     github: "#",
-  });
+  };
 
   useEffect(() => {
     const revealElements = document.querySelectorAll(".reveal");

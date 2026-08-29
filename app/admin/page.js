@@ -421,91 +421,13 @@ function AwardsTab() {
 }
 
 function SettingsTab() {
-  const [settings, setSettings] = useState({});
-  const [pass, setPass] = useState({ current: "", next: "" });
-  const [msg, setMsg] = useState("");
-  const [busy, setBusy] = useState(false);
-
-  useEffect(() => {
-    api("/api/admin/settings").then(setSettings);
-  }, []);
-
-  const update = (k, v) => setSettings((s) => ({ ...s, [k]: v }));
-
-  const saveContent = async (e) => {
-    e.preventDefault();
-    setBusy(true);
-    try {
-      const values = { ...settings };
-      delete values.adminPasswordHash;
-      await api("/api/admin/settings", { method: "PUT", body: JSON.stringify({ values }) });
-      setMsg("Settings saved.");
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const changePassword = async (e) => {
-    e.preventDefault();
-    setBusy(true);
-    try {
-      await api("/api/admin/settings", {
-        method: "PUT",
-        body: JSON.stringify({
-          changePassword: { currentPassword: pass.current, newPassword: pass.next },
-        }),
-      });
-      setPass({ current: "", next: "" });
-      setMsg("Password changed.");
-    } finally {
-      setBusy(false);
-    }
-  };
-
   return (
-    <div>
-      <form className="admin-form" onSubmit={saveContent}>
-        <h2>Site Content</h2>
-        <Field label="Name (e.g. TEHSEEN ABBAS)" name="heroName" value={settings.heroName} onChange={(n, v) => update(n, v)} />
-        <Field label="Hero subtitle" name="heroSubtitle" value={settings.heroSubtitle} onChange={(n, v) => update(n, v)} />
-        <Field label="Hero subtitle link text" name="heroSubtitleLink" value={settings.heroSubtitleLink} onChange={(n, v) => update(n, v)} />
-        <Field label="Hero subtitle link URL" name="heroSubtitleUrl" value={settings.heroSubtitleUrl} onChange={(n, v) => update(n, v)} />
-        <Field label="Hero description" name="heroDesc" rows={3} value={settings.heroDesc} onChange={(n, v) => update(n, v)} />
-        <h3 className="form-sub">Contact Info</h3>
-        <Field label="Contact text" name="contactText" rows={3} value={settings.contactText} onChange={(n, v) => update(n, v)} />
-        <Field label="Address (use newline for 2 lines)" name="address" value={settings.address} onChange={(n, v) => update(n, v)} />
-        <Field label="Phone (use newline for 2 lines)" name="phone" value={settings.phone} onChange={(n, v) => update(n, v)} />
-        <Field label="Email (use newline for 2 lines)" name="email" value={settings.email} onChange={(n, v) => update(n, v)} />
-        <h3 className="form-sub">Images & Branding</h3>
-        <Field label="Profile image path" name="profileImage" value={settings.profileImage} onChange={(n, v) => update(n, v)} />
-        <Field label="Logo image path" name="logoImage" value={settings.logoImage} onChange={(n, v) => update(n, v)} />
-        <Field label="Brand text" name="brandText" value={settings.brandText} onChange={(n, v) => update(n, v)} />
-        <h3 className="form-sub">Social Links</h3>
-        {(() => {
-          let social = {};
-          try { social = settings.social ? JSON.parse(settings.social) : {}; } catch { social = {}; }
-          return Object.keys({ facebook: 1, twitter: 1, linkedin: 1, github: 1 }).map((key) => (
-            <Field
-              key={key}
-              label={key + " URL"}
-              name={key}
-              value={social[key] || ""}
-              onChange={(n, v) => update("social", JSON.stringify({ ...social, [n]: v }))}
-            />
-          ));
-        })()}
-        <button type="submit" disabled={busy}>{busy ? "Saving..." : "Save"}</button>
-        {msg && <div className="msg">{msg}</div>}
-      </form>
-
-      <form className="admin-form" onSubmit={changePassword}>
-        <h2>Change Admin Password</h2>
-        <input type="password" placeholder="Current password" value={pass.current}
-          onChange={(e) => setPass((p) => ({ ...p, current: e.target.value }))} required />
-        <input type="password" placeholder="New password" value={pass.next}
-          onChange={(e) => setPass((p) => ({ ...p, next: e.target.value }))} required />
-        <button type="submit">Change Password</button>
-      </form>
+    <div className="admin-form">
+      <h2>Settings</h2>
+      <p>
+        All site content is static. The admin password is managed by the
+        <code> ADMIN_PASSWORD</code> environment variable — there is nothing to change here.
+      </p>
     </div>
   );
 }
