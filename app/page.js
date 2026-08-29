@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const CATEGORIES = [
   { value: "all", label: "All" },
@@ -48,6 +48,7 @@ function splitLines(v) {
 export default function Home() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [data, setData] = useState(null);
+  const [selectedIdx, setSelectedIdx] = useState(null);
 
   useEffect(() => {
     fetch("/api/portfolio")
@@ -132,6 +133,30 @@ export default function Home() {
     (item) => activeFilter === "all" || item.category === activeFilter
   );
 
+  const selectedItem = selectedIdx === null ? null : visibleItems[selectedIdx];
+
+  const goPrev = useCallback(
+    () =>
+      selectedIdx !== null &&
+      setSelectedIdx((i) => (i - 1 + visibleItems.length) % visibleItems.length),
+    [selectedIdx, visibleItems.length]
+  );
+  const goNext = useCallback(
+    () => selectedIdx !== null && setSelectedIdx((i) => (i + 1) % visibleItems.length),
+    [selectedIdx, visibleItems.length]
+  );
+
+  useEffect(() => {
+    if (selectedIdx === null) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") setSelectedIdx(null);
+      else if (e.key === "ArrowLeft") goPrev();
+      else if (e.key === "ArrowRight") goNext();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [selectedIdx, visibleItems.length, goNext, goPrev]);
+
   return (
     <>
       <button className="mobile-toggle" onClick={toggleSidebar}>
@@ -208,13 +233,14 @@ export default function Home() {
             ))}
           </div>
           <div className="portfolio-grid">
-            {visibleItems.map((item) => (
+            {visibleItems.map((item, idx) => (
               <div
                 key={item.id}
                 className="portfolio-item reveal"
                 data-category={item.category}
+                onClick={() => setSelectedIdx(idx)}
               >
-                <img src={item.src} alt={CATEGORY_LABELS[item.category]} />
+                <img src={item.src} alt={item.description || CATEGORY_LABELS[item.category]} />
                 <div className="portfolio-overlay">
                   <i className="fas fa-search-plus"></i>
                 </div>
@@ -308,6 +334,21 @@ export default function Home() {
           </div>
         </section>
       </main>
+
+      {selectedItem && (
+        <div className="lightbox" onClick={() => setSelectedIdx(null)}>
+          <button className="lightbox-nav lightbox-prev" onClick={(e) => { e.stopPropagation(); goPrev(); }}>&#10094;</button>
+          <button className="lightbox-nav lightbox-next" onClick={(e) => { e.stopPropagation(); goNext(); }}>&#10095;</button>
+          <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
+            <button className="lightbox-close" onClick={() => setSelectedIdx(null)}>&times;</button>
+            <img src={selectedItem.src} alt={selectedItem.description || CATEGORY_LABELS[selectedItem.category]} />
+            <p className="lightbox-desc">
+              {selectedItem.description || "No description provided."}
+            </p>
+            <span className="lightbox-cat">{CATEGORY_LABELS[selectedItem.category]}</span>
+          </div>
+        </div>
+      )}
     </>
   );
 }

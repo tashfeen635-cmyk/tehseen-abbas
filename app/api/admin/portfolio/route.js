@@ -24,7 +24,7 @@ export async function POST(req) {
   if (!(await isAuthenticated())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { src, category } = await req.json();
+  const { src, category, description = "" } = await req.json();
   if (!src || !category) {
     return NextResponse.json({ error: "src and category required" }, { status: 400 });
   }
@@ -36,6 +36,7 @@ export async function POST(req) {
   const doc = await PortfolioItem.create({
     src,
     category,
+    description,
     sortOrder: maxOrder + 1,
   });
   return NextResponse.json({ id: String(doc._id) });
@@ -45,12 +46,13 @@ export async function PUT(req) {
   if (!(await isAuthenticated())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { id, src, category, sortOrder } = await req.json();
+  const { id, src, category, description, sortOrder } = await req.json();
   if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
   await initDb();
   const set = {};
   if (src !== undefined) set.src = src;
   if (category !== undefined) set.category = category;
+  if (description !== undefined) set.description = description;
   if (sortOrder !== undefined) set.sortOrder = sortOrder;
   await PortfolioItem.updateOne({ _id: id }, { $set: set });
   return NextResponse.json({ ok: true });

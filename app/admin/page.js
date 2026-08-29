@@ -182,9 +182,39 @@ function DashboardTab() {
   );
 }
 
+function ImageCard({ item, idx, total, onUp, onDown, onDelete, onSave }) {
+  const [desc, setDesc] = useState(item.description);
+  const dirty = desc !== item.description;
+  return (
+    <div className="image-card">
+      <img src={item.src} alt={item.src} />
+      <div className="image-actions">
+        <button disabled={idx === 0} onClick={onUp}>↑</button>
+        <button disabled={idx === total - 1} onClick={onDown}>↓</button>
+        <button className="btn-danger" onClick={onDelete}>Delete</button>
+      </div>
+      <textarea
+        className="portfolio-desc"
+        value={desc}
+        onChange={(e) => setDesc(e.target.value)}
+        placeholder="Add description..."
+      ></textarea>
+      <button
+        className="btn-save"
+        disabled={!dirty}
+        onClick={() => onSave(desc)}
+      >
+        {dirty ? "Save" : "Saved"}
+      </button>
+      <div className="image-path" title={item.src}>{item.src}</div>
+    </div>
+  );
+}
+
 function PortfolioTab() {
   const [items, setItems] = useState([]);
   const [category, setCategory] = useState("personal");
+  const [description, setDescription] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
 
@@ -206,7 +236,7 @@ function PortfolioTab() {
         const fd = new FormData();
         fd.append("file", file);
         const { url } = await api("/api/admin/upload", { method: "POST", body: fd });
-        await api("/api/admin/portfolio", { method: "POST", body: JSON.stringify({ src: url, category }) });
+        await api("/api/admin/portfolio", { method: "POST", body: JSON.stringify({ src: url, category, description }) });
         added++;
       }
       setMsg(`Uploaded ${added} image${added > 1 ? "s" : ""} to ${CATEGORY_OPTIONS.find((c) => c.value === category)?.label}.`);
@@ -221,6 +251,12 @@ function PortfolioTab() {
   const remove = async (id) => {
     await api("/api/admin/portfolio", { method: "DELETE", body: JSON.stringify({ id }) });
     setMsg("Removed.");
+    load();
+  };
+
+  const updateDescription = async (id, value) => {
+    await api("/api/admin/portfolio", { method: "PUT", body: JSON.stringify({ id, description: value }) });
+    setMsg("Description updated.");
     load();
   };
 
@@ -244,6 +280,14 @@ function PortfolioTab() {
           </select>
         </div>
         <div className="form-row">
+          <textarea
+            placeholder="Description for this image (optional)"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={2}
+          ></textarea>
+        </div>
+        <div className="form-row">
           <label className={`upload-btn${busy ? " disabled" : ""}`}>
             <i className="fas fa-upload"></i> {busy ? "Uploading..." : "Choose images"}
             <input type="file" accept="image/*" multiple onChange={upload} disabled={busy} hidden />
@@ -252,28 +296,26 @@ function PortfolioTab() {
         {msg && <div className="msg">{msg}</div>}
       </form>
 
-      {CATEGORY_OPTIONS.map((cat) => {
-        const catItems = items.filter((i) => i.category === cat.value);
+      {[...CATEGORY_OPTIONS]
+        .sort((a, b) => (a.value === category ? -1 : b.value === category ? 1 : 0))
+        .map((cat) => {
+        const catItems =
+          cat.value === "all" ? items : items.filter((i) => i.category === cat.value);
         return (
           <div className="admin-section" key={cat.value}>
             <h3>{cat.label} ({catItems.length})</h3>
             <div className="image-grid">
               {catItems.map((item, idx) => (
-                <div className="image-card" key={item.id}>
-                  <img src={item.src} alt={item.src} />
-                  <div className="image-actions">
-                    <button
-                      disabled={idx === 0}
-                      onClick={() => setOrder(item.id, idx - 1)}
-                    >↑</button>
-                    <button
-                      disabled={idx === catItems.length - 1}
-                      onClick={() => setOrder(item.id, idx + 1)}
-                    >↓</button>
-                    <button className="btn-danger" onClick={() => remove(item.id)}>Delete</button>
-                  </div>
-                  <div className="image-path" title={item.src}>{item.src}</div>
-                </div>
+                <ImageCard
+                  key={item.id}
+                  item={item}
+                  idx={idx}
+                  total={catItems.length}
+                  onUp={() => setOrder(item.id, idx - 1)}
+                  onDown={() => setOrder(item.id, idx + 1)}
+                  onDelete={() => remove(item.id)}
+                  onSave={(value) => updateDescription(item.id, value)}
+                />
               ))}
             </div>
           </div>
