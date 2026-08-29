@@ -421,13 +421,38 @@ function AwardsTab() {
 }
 
 function SettingsTab() {
+  const [pass, setPass] = useState({ current: "", next: "" });
+  const [msg, setMsg] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const changePassword = async (e) => {
+    e.preventDefault();
+    setBusy(true);
+    try {
+      await api("/api/admin/settings", {
+        method: "PUT",
+        body: JSON.stringify({
+          changePassword: { currentPassword: pass.current, newPassword: pass.next },
+        }),
+      });
+      setPass({ current: "", next: "" });
+      setMsg("Password changed.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
   return (
-    <div className="admin-form">
-      <h2>Settings</h2>
-      <p>
-        All site content is static. The admin password is managed by the
-        <code> ADMIN_PASSWORD</code> environment variable — there is nothing to change here.
-      </p>
+    <div>
+      <form className="admin-form" onSubmit={changePassword}>
+        <h2>Change Admin Password</h2>
+        <input type="password" placeholder="Current password" value={pass.current}
+          onChange={(e) => setPass((p) => ({ ...p, current: e.target.value }))} required />
+        <input type="password" placeholder="New password" value={pass.next}
+          onChange={(e) => setPass((p) => ({ ...p, next: e.target.value }))} required />
+        <button type="submit" disabled={busy}>{busy ? "Saving..." : "Change Password"}</button>
+        {msg && <div className="msg">{msg}</div>}
+      </form>
     </div>
   );
 }
