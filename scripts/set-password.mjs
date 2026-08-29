@@ -1,21 +1,22 @@
-import { sql } from "@vercel/postgres";
+import { connectDb } from "../lib/db.mjs";
 import bcrypt from "bcryptjs";
 
 const password = process.argv[2] || "admin";
 const username = process.argv[3] || "admin";
 const hash = bcrypt.hashSync(password, 10);
 
-await sql`
-  CREATE TABLE IF NOT EXISTS site_settings (key TEXT PRIMARY KEY, value TEXT NOT NULL)
-`;
+await connectDb();
+const { SiteSetting } = await import("../lib/models.mjs");
 
-await sql`
-  INSERT INTO site_settings (key, value) VALUES ('adminPasswordHash', ${hash})
-  ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value
-`;
-await sql`
-  INSERT INTO site_settings (key, value) VALUES ('adminUsername', ${username})
-  ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value
-`;
+await SiteSetting.updateOne(
+  { key: "adminPasswordHash" },
+  { $set: { value: hash } },
+  { upsert: true }
+);
+await SiteSetting.updateOne(
+  { key: "adminUsername" },
+  { $set: { value: username } },
+  { upsert: true }
+);
 
 console.log(`Admin credentials set: username="${username}" password="${password}"`);
