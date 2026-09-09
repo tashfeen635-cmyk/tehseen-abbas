@@ -1,7 +1,7 @@
 import "./admin.css";
 
 export const metadata = {
-  title: "Admin - Tehseen Abbas Portfolio",
+  title: "Admin - Tahseen Abbas Portfolio",
 };
 
 export default function AdminLayout({ children }) {

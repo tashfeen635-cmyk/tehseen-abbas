@@ -14,7 +14,7 @@ const CATEGORY_OPTIONS = [
   { value: "awardsPresented", label: "Awards" },
 ];
 
-const TABS = ["Dashboard", "Portfolio", "Experience", "Skills", "Awards", "Settings"];
+const TABS = ["Dashboard", "Portfolio", "Mission & Vision", "Future Vision", "Community", "Testimonials", "Partners", "Settings"];
 
 async function api(url, options = {}) {
   const res = await fetch(url, {
@@ -42,10 +42,15 @@ export default function AdminPage() {
       .catch(() => setStatus("login"));
   }, []);
 
+  const refreshUsername = async () => {
+    const r = await api("/api/admin/check");
+    setUsername(r.username || "admin");
+  };
+
   if (status === "loading") return <div className="admin-loader">Loading...</div>;
   if (status === "login") return <Login onSuccess={() => setStatus("authed")} />;
 
-  return <Dashboard username={username} tab={tab} setTab={setTab} onLogout={() => setStatus("login")} />;
+  return <Dashboard username={username} tab={tab} setTab={setTab} onLogout={() => setStatus("login")} onUsernameUpdate={refreshUsername} />;
 }
 
 function Login({ onSuccess }) {
@@ -73,7 +78,7 @@ function Login({ onSuccess }) {
     <div className="admin-login">
       <form className="login-box" onSubmit={submit}>
         <h1>Admin Login</h1>
-        <p>Tehseen Abbas Portfolio</p>
+        <p>Tahseen Abbas Portfolio</p>
         <input
           type="text"
           placeholder="Username"
@@ -107,7 +112,7 @@ function Login({ onSuccess }) {
   );
 }
 
-function Dashboard({ username, tab, setTab, onLogout }) {
+function Dashboard({ username, tab, setTab, onLogout, onUsernameUpdate }) {
   const logout = async () => {
     await api("/api/admin/logout", { method: "POST" });
     onLogout();
@@ -137,10 +142,12 @@ function Dashboard({ username, tab, setTab, onLogout }) {
         <div className="admin-content">
           {tab === "Dashboard" && <DashboardTab />}
           {tab === "Portfolio" && <PortfolioTab />}
-          {tab === "Experience" && <ExperienceTab />}
-          {tab === "Skills" && <SkillsTab />}
-          {tab === "Awards" && <AwardsTab />}
-          {tab === "Settings" && <SettingsTab />}
+          {tab === "Mission & Vision" && <ExperienceTab />}
+          {tab === "Future Vision" && <AwardsTab />}
+          {tab === "Community" && <CommunityTab />}
+          {tab === "Testimonials" && <TestimonialsTab />}
+          {tab === "Partners" && <PartnersTab />}
+          {tab === "Settings" && <SettingsTab onUsernameUpdate={onUsernameUpdate} />}
         </div>
       </main>
     </div>
@@ -150,21 +157,25 @@ function Dashboard({ username, tab, setTab, onLogout }) {
 function DashboardTab() {
   const [counts, setCounts] = useState(null);
   useEffect(() => {
-    api("/api/portfolio").then((d) =>
+    Promise.all([api("/api/portfolio"), api("/api/partners")]).then(([d, p]) =>
       setCounts({
         portfolio: d.portfolio.length,
         experience: d.experience.length,
-        skills: d.skills.length,
         awards: d.awards.length,
+        community: d.communities.length,
+        testimonials: d.testimonials.length,
+        partners: p.length,
       })
     );
   }, []);
   if (!counts) return <div className="admin-loader">Loading...</div>;
   const cards = [
     { label: "Portfolio Images", value: counts.portfolio },
-    { label: "Experience Entries", value: counts.experience },
-    { label: "Skills", value: counts.skills },
-    { label: "Awards", value: counts.awards },
+    { label: "Mission & Vision Cards", value: counts.experience },
+    { label: "Future Vision Items", value: counts.awards },
+    { label: "Community Initiatives", value: counts.community },
+    { label: "Testimonials", value: counts.testimonials },
+    { label: "Partners", value: counts.partners },
   ];
   return (
     <div className="stat-grid">
@@ -175,8 +186,8 @@ function DashboardTab() {
         </div>
       ))}
       <div className="stat-note">
-        Use the tabs to manage portfolio images, experience, skills, awards, and site
-        content. Changes are saved to the database and appear on the public site on reload.
+        Use the tabs to manage portfolio images, mission &amp; vision, future vision, community
+        initiatives, testimonials, partners, and site content. Changes appear on the public site on reload.
       </div>
     </div>
   );
@@ -214,7 +225,7 @@ function ImageCard({ item, idx, total, onUp, onDown, onDelete, onSave }) {
 function PortfolioTab() {
   const [items, setItems] = useState([]);
   const [category, setCategory] = useState("personal");
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState("Chairman Binary Hub Tahseen Abbas");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
 
@@ -351,7 +362,7 @@ function useCrud(endpoint, blank) {
     load();
   };
 
-  return { rows, editing, setEditing, save, remove, msg, setMsg };
+  return { rows, editing, setEditing, save, remove, msg, setMsg, load };
 }
 
 function Field({ label, value, onChange, name, type = "text", rows }) {
@@ -369,23 +380,58 @@ function Field({ label, value, onChange, name, type = "text", rows }) {
 }
 
 function ExperienceTab() {
-  const c = useCrud("/api/admin/experience", { icon: "", title: "", description: "", date: "", color: "cyan" });
+  const c = useCrud("/api/admin/experience", { icon: "", title: "", description: "", date: "", color: "cyan", image: "" });
+  const [uploading, setUploading] = useState(false);
+
+  const onImage = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const { url } = await api("/api/admin/upload", { method: "POST", body: fd });
+      c.setEditing({ ...c.editing, image: url });
+    } catch (err) {
+      c.setMsg(`Error: ${err.message}`);
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
     <div>
       <form className="admin-form" onSubmit={c.save}>
-        <h2>{c.editing.id ? "Edit" : "Add"} Experience</h2>
+        <h2>{c.editing.id ? "Edit" : "Add"} Mission &amp; Vision Card</h2>
         <Field label="Title" name="title" value={c.editing.title} onChange={(n, v) => c.setEditing({ ...c.editing, [n]: v })} />
         <Field label="Font Awesome icon (e.g. fa-laptop-code)" name="icon" value={c.editing.icon} onChange={(n, v) => c.setEditing({ ...c.editing, [n]: v })} />
         <Field label="Color (cyan / yellow / green / blue)" name="color" value={c.editing.color} onChange={(n, v) => c.setEditing({ ...c.editing, [n]: v })} />
         <Field label="Date range" name="date" value={c.editing.date} onChange={(n, v) => c.setEditing({ ...c.editing, [n]: v })} />
         <Field label="Description" name="description" rows={4} value={c.editing.description} onChange={(n, v) => c.setEditing({ ...c.editing, [n]: v })} />
-        {c.editing.id && <button type="button" className="btn-cancel" onClick={() => c.setEditing({ icon: "", title: "", description: "", date: "", color: "cyan" })}>Cancel edit</button>}
+        <label className="field">
+          <span>Card image</span>
+          {c.editing.image && (
+            <img src={c.editing.image} alt="Preview" className="field-preview" />
+          )}
+          <div className="form-row">
+            <label className={`upload-btn${uploading ? " disabled" : ""}`}>
+              <i className="fas fa-upload"></i>
+              {uploading ? "Uploading..." : c.editing.image ? "Replace image" : "Choose image"}
+              <input type="file" accept="image/*" onChange={onImage} disabled={uploading} hidden />
+            </label>
+            {c.editing.image && (
+              <button type="button" className="btn-cancel" onClick={() => c.setEditing({ ...c.editing, image: "" })}>Remove</button>
+            )}
+          </div>
+        </label>
+        {c.editing.id && <button type="button" className="btn-cancel" onClick={() => c.setEditing({ icon: "", title: "", description: "", date: "", color: "cyan", image: "" })}>Cancel edit</button>}
         <button type="submit">Save</button>
         {c.msg && <div className="msg">{c.msg}</div>}
       </form>
       <div className="admin-list">
         {c.rows.map((r) => (
           <div className="list-row" key={r.id}>
+            {r.image && <img src={r.image} alt="" className="list-thumb" />}
             <div className="list-info">
               <strong>{r.title}</strong>
               <span>{r.date} · {r.color}</span>
@@ -401,16 +447,16 @@ function ExperienceTab() {
   );
 }
 
-function SkillsTab() {
-  const c = useCrud("/api/admin/skills", { icon: "", name: "", target: 0 });
+function CommunityTab() {
+  const c = useCrud("/api/admin/community", { icon: "", title: "", description: "" });
   return (
     <div>
       <form className="admin-form" onSubmit={c.save}>
-        <h2>{c.editing.id ? "Edit" : "Add"} Skill</h2>
-        <Field label="Skill name" name="name" value={c.editing.name} onChange={(n, v) => c.setEditing({ ...c.editing, [n]: v })} />
-        <Field label="Icon (e.g. fa-html5, fa-css3-alt, fa-code, fa-php)" name="icon" value={c.editing.icon} onChange={(n, v) => c.setEditing({ ...c.editing, [n]: v })} />
-        <Field label="Target % (0-100)" name="target" type="number" value={c.editing.target} onChange={(n, v) => c.setEditing({ ...c.editing, [n]: v })} />
-        {c.editing.id && <button type="button" className="btn-cancel" onClick={() => c.setEditing({ icon: "", name: "", target: 0 })}>Cancel edit</button>}
+        <h2>{c.editing.id ? "Edit" : "Add"} Community Initiative</h2>
+        <Field label="Title" name="title" value={c.editing.title} onChange={(n, v) => c.setEditing({ ...c.editing, [n]: v })} />
+        <Field label="Icon (e.g. fa-graduation-cap, fa-users, fa-laptop-code)" name="icon" value={c.editing.icon} onChange={(n, v) => c.setEditing({ ...c.editing, [n]: v })} />
+        <Field label="Description" name="description" rows={3} value={c.editing.description} onChange={(n, v) => c.setEditing({ ...c.editing, [n]: v })} />
+        {c.editing.id && <button type="button" className="btn-cancel" onClick={() => c.setEditing({ icon: "", title: "", description: "" })}>Cancel edit</button>}
         <button type="submit">Save</button>
         {c.msg && <div className="msg">{c.msg}</div>}
       </form>
@@ -418,7 +464,7 @@ function SkillsTab() {
         {c.rows.map((r) => (
           <div className="list-row" key={r.id}>
             <div className="list-info">
-              <strong>{r.name} — {r.target}%</strong>
+              <strong>{r.title}</strong>
               <span>{r.icon}</span>
             </div>
             <div className="list-actions">
@@ -432,22 +478,143 @@ function SkillsTab() {
   );
 }
 
-function AwardsTab() {
-  const c = useCrud("/api/admin/awards", { date: "", title: "", description: "" });
+function TestimonialsTab() {
+  const c = useCrud("/api/admin/testimonials", { text: "", name: "", role: "", avatar: "", approved: true });
+  const [uploading, setUploading] = useState(false);
+
+  const onImage = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const { url } = await api("/api/admin/upload", { method: "POST", body: fd });
+      c.setEditing({ ...c.editing, avatar: url });
+    } catch (err) {
+      c.setMsg(`Error: ${err.message}`);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const toggleApproved = async (r) => {
+    await api("/api/admin/testimonials", {
+      method: "PUT",
+      body: JSON.stringify({ id: r.id, approved: !r.approved }),
+    });
+    c.setMsg(r.approved ? "Review unapproved (hidden from site)." : "Review approved (now visible on site).");
+    c.load();
+  };
+
   return (
     <div>
       <form className="admin-form" onSubmit={c.save}>
-        <h2>{c.editing.id ? "Edit" : "Add"} Award</h2>
-        <Field label="Date" name="date" value={c.editing.date} onChange={(n, v) => c.setEditing({ ...c.editing, [n]: v })} />
-        <Field label="Title" name="title" value={c.editing.title} onChange={(n, v) => c.setEditing({ ...c.editing, [n]: v })} />
-        <Field label="Description" name="description" rows={3} value={c.editing.description} onChange={(n, v) => c.setEditing({ ...c.editing, [n]: v })} />
-        {c.editing.id && <button type="button" className="btn-cancel" onClick={() => c.setEditing({ date: "", title: "", description: "" })}>Cancel edit</button>}
+        <h2>{c.editing.id ? "Edit" : "Add"} Testimonial</h2>
+        <Field label="Name" name="name" value={c.editing.name} onChange={(n, v) => c.setEditing({ ...c.editing, [n]: v })} />
+        <Field label="Role" name="role" value={c.editing.role} onChange={(n, v) => c.setEditing({ ...c.editing, [n]: v })} />
+        <Field label="Quote" name="text" rows={3} value={c.editing.text} onChange={(n, v) => c.setEditing({ ...c.editing, [n]: v })} />
+        <label className="field">
+          <span>Avatar image</span>
+          {c.editing.avatar && (
+            <img src={c.editing.avatar} alt="Preview" className="field-preview" />
+          )}
+          <div className="form-row">
+            <label className={`upload-btn${uploading ? " disabled" : ""}`}>
+              <i className="fas fa-upload"></i>
+              {uploading ? "Uploading..." : c.editing.avatar ? "Replace image" : "Choose image"}
+              <input type="file" accept="image/*" onChange={onImage} disabled={uploading} hidden />
+            </label>
+            {c.editing.avatar && (
+              <button type="button" className="btn-cancel" onClick={() => c.setEditing({ ...c.editing, avatar: "" })}>Remove</button>
+            )}
+          </div>
+        </label>
+        <label className="field inline-field">
+          <input
+            type="checkbox"
+            checked={!!c.editing.approved}
+            onChange={(e) => c.setEditing({ ...c.editing, approved: e.target.checked })}
+          />
+          <span>Approved (visible on site)</span>
+        </label>
+        {c.editing.id && <button type="button" className="btn-cancel" onClick={() => c.setEditing({ text: "", name: "", role: "", avatar: "", approved: true })}>Cancel edit</button>}
         <button type="submit">Save</button>
         {c.msg && <div className="msg">{c.msg}</div>}
       </form>
       <div className="admin-list">
         {c.rows.map((r) => (
           <div className="list-row" key={r.id}>
+            <img src={r.avatar || "/images/default-avatar.svg"} alt="" className="list-thumb" />
+            <div className="list-info">
+              <strong>{r.name} — {r.role}{r.approved === false && <span className="pending-badge">Pending</span>}</strong>
+              <span>{r.text}</span>
+            </div>
+            <div className="list-actions">
+              <button className={r.approved === false ? "btn-approve" : ""} onClick={() => toggleApproved(r)}>
+                {r.approved === false ? "Approve" : "Hide"}
+              </button>
+              <button onClick={() => c.setEditing(r)}>Edit</button>
+              <button className="btn-danger" onClick={() => c.remove(r.id)}>Delete</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function AwardsTab() {
+  const c = useCrud("/api/admin/awards", { date: "", title: "", description: "", image: "" });
+  const [uploading, setUploading] = useState(false);
+
+  const onImage = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const { url } = await api("/api/admin/upload", { method: "POST", body: fd });
+      c.setEditing({ ...c.editing, image: url });
+    } catch (err) {
+      c.setMsg(`Error: ${err.message}`);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div>
+      <form className="admin-form" onSubmit={c.save}>
+        <h2>{c.editing.id ? "Edit" : "Add"} Future Vision Item</h2>
+        <Field label="Date" name="date" value={c.editing.date} onChange={(n, v) => c.setEditing({ ...c.editing, [n]: v })} />
+        <Field label="Title" name="title" value={c.editing.title} onChange={(n, v) => c.setEditing({ ...c.editing, [n]: v })} />
+        <Field label="Description" name="description" rows={3} value={c.editing.description} onChange={(n, v) => c.setEditing({ ...c.editing, [n]: v })} />
+        <label className="field">
+          <span>Item image</span>
+          {c.editing.image && (
+            <img src={c.editing.image} alt="Preview" className="field-preview" />
+          )}
+          <div className="form-row">
+            <label className={`upload-btn${uploading ? " disabled" : ""}`}>
+              <i className="fas fa-upload"></i>
+              {uploading ? "Uploading..." : c.editing.image ? "Replace image" : "Choose image"}
+              <input type="file" accept="image/*" onChange={onImage} disabled={uploading} hidden />
+            </label>
+            {c.editing.image && (
+              <button type="button" className="btn-cancel" onClick={() => c.setEditing({ ...c.editing, image: "" })}>Remove</button>
+            )}
+          </div>
+        </label>
+        {c.editing.id && <button type="button" className="btn-cancel" onClick={() => c.setEditing({ date: "", title: "", description: "", image: "" })}>Cancel edit</button>}
+        <button type="submit">Save</button>
+        {c.msg && <div className="msg">{c.msg}</div>}
+      </form>
+      <div className="admin-list">
+        {c.rows.map((r) => (
+          <div className="list-row" key={r.id}>
+            {r.image && <img src={r.image} alt="" className="list-thumb" />}
             <div className="list-info">
               <strong>{r.title}</strong>
               <span>{r.date}</span>
@@ -463,10 +630,103 @@ function AwardsTab() {
   );
 }
 
-function SettingsTab() {
+function PartnersTab() {
+  const [rows, setRows] = useState([]);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState("");
+
+  const load = useCallback(() => api("/api/admin/partners").then(setRows), []);
+  useEffect(() => { load(); }, [load]);
+
+  const add = async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    setBusy(true);
+    setMsg("");
+    e.target.value = "";
+    try {
+      for (const file of files) {
+        const fd = new FormData();
+        fd.append("file", file);
+        const { url } = await api("/api/admin/upload", { method: "POST", body: fd });
+        await api("/api/admin/partners", {
+          method: "POST",
+          body: JSON.stringify({ src: url, name: file.name }),
+        });
+      }
+      setMsg(`Added ${files.length} partner logo${files.length > 1 ? "s" : ""}.`);
+      load();
+    } catch (err) {
+      setMsg(`Error: ${err.message}`);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const remove = async (id) => {
+    await api("/api/admin/partners", { method: "DELETE", body: JSON.stringify({ id }) });
+    setMsg("Removed.");
+    load();
+  };
+
+  return (
+    <div>
+      <form className="admin-form" onSubmit={(e) => e.preventDefault()}>
+        <h2>Add Partner Logo</h2>
+        <p className="form-hint">
+          Select logo images from your device — they appear in the Partners &amp; Collaborations marquee.
+        </p>
+        <div className="form-row">
+          <label className={`upload-btn${busy ? " disabled" : ""}`}>
+            <i className="fas fa-upload"></i> {busy ? "Uploading..." : "Choose images"}
+            <input type="file" accept="image/*" multiple onChange={add} disabled={busy} hidden />
+          </label>
+        </div>
+        {msg && <div className="msg">{msg}</div>}
+      </form>
+      {rows.length === 0 ? (
+        <div className="form-hint">No partner logos yet. Add one above.</div>
+      ) : (
+        <div className="image-grid">
+          {rows.map((r) => (
+            <div className="image-card" key={r.id}>
+              <img src={r.src} alt={r.name || "Partner logo"} />
+              <div className="image-actions">
+                <button className="btn-danger" onClick={() => remove(r.id)}>Delete</button>
+              </div>
+              <div className="image-path" title={r.src}>{r.name || "Partner"}</div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SettingsTab({ onUsernameUpdate }) {
   const [pass, setPass] = useState({ current: "", next: "" });
+  const [showPw, setShowPw] = useState({ current: false, next: false });
+  const [newUser, setNewUser] = useState("");
   const [msg, setMsg] = useState("");
   const [busy, setBusy] = useState(false);
+
+  const changeUsername = async (e) => {
+    e.preventDefault();
+    setBusy(true);
+    try {
+      await api("/api/admin/settings", {
+        method: "PUT",
+        body: JSON.stringify({ changeUsername: newUser }),
+      });
+      setNewUser("");
+      setMsg("Username changed.");
+      onUsernameUpdate?.();
+    } catch (err) {
+      setMsg(`Error: ${err.message}`);
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const changePassword = async (e) => {
     e.preventDefault();
@@ -489,12 +749,33 @@ function SettingsTab() {
 
   return (
     <div>
+      <form className="admin-form" onSubmit={changeUsername}>
+        <h2>Change Admin Username</h2>
+        <input type="text" placeholder="New username" value={newUser}
+          onChange={(e) => setNewUser(e.target.value)} required />
+        <button type="submit" disabled={busy}>{busy ? "Saving..." : "Change Username"}</button>
+      </form>
+
       <form className="admin-form" onSubmit={changePassword}>
         <h2>Change Admin Password</h2>
-        <input type="password" placeholder="Current password" value={pass.current}
-          onChange={(e) => setPass((p) => ({ ...p, current: e.target.value }))} required />
-        <input type="password" placeholder="New password" value={pass.next}
-          onChange={(e) => setPass((p) => ({ ...p, next: e.target.value }))} required />
+        <div className="password-wrap">
+          <input type={showPw.current ? "text" : "password"} placeholder="Current password" value={pass.current}
+            onChange={(e) => setPass((p) => ({ ...p, current: e.target.value }))} required />
+          <button type="button" className="pw-toggle"
+            aria-label={showPw.current ? "Hide current password" : "Show current password"}
+            onClick={() => setShowPw((s) => ({ ...s, current: !s.current }))}>
+            <i className={`fas ${showPw.current ? "fa-eye-slash" : "fa-eye"}`}></i>
+          </button>
+        </div>
+        <div className="password-wrap">
+          <input type={showPw.next ? "text" : "password"} placeholder="New password" value={pass.next}
+            onChange={(e) => setPass((p) => ({ ...p, next: e.target.value }))} required />
+          <button type="button" className="pw-toggle"
+            aria-label={showPw.next ? "Hide new password" : "Show new password"}
+            onClick={() => setShowPw((s) => ({ ...s, next: !s.next }))}>
+            <i className={`fas ${showPw.next ? "fa-eye-slash" : "fa-eye"}`}></i>
+          </button>
+        </div>
         <button type="submit" disabled={busy}>{busy ? "Saving..." : "Change Password"}</button>
         {msg && <div className="msg">{msg}</div>}
       </form>

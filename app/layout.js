@@ -1,8 +1,9 @@
 import "./globals.css";
+import ExtensionCleanup from "./extension-cleanup";
 
 export const metadata = {
-  title: "Tehseen Abbas - Profile",
-  description: "Portfolio of Tehseen Abbas",
+  title: "Tahseen Abbas - Profile",
+  description: "Portfolio of Tahseen Abbas",
 };
 
 export default function RootLayout({ children }) {
@@ -19,7 +20,10 @@ export default function RootLayout({ children }) {
         />
         <link rel="icon" href="/logo/logo.png" type="image/png" />
       </head>
-      <body>{children}</body>
+      <body>
+        <ExtensionCleanup />
+        {children}
+      </body>
     </html>
   );
 }

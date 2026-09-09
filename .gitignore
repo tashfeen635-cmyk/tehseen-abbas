@@ -43,3 +43,6 @@ next-env.d.ts
 
 # uploaded media
 /public/uploads/
+
+# local raw image dump
+/All-Images/

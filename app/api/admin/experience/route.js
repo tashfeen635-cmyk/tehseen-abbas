@@ -27,6 +27,7 @@ export async function POST(req) {
     description: body.description || "",
     date: body.date || "",
     color: body.color || "cyan",
+    image: body.image || "",
   });
   return NextResponse.json({ id: String(doc._id) });
 }
@@ -45,6 +46,7 @@ export async function PUT(req) {
         description: body.description,
         date: body.date,
         color: body.color,
+        image: body.image,
       },
     }
   );
