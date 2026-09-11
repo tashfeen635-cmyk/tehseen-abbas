@@ -971,14 +971,14 @@ h1, h2, h3, h4, h5, h6 {
 .mobile-toggle {
     display: none;
     position: fixed;
-    top: 20px; left: 20px;
+    top: 20px; right: 20px;
     z-index: 1100;
-    background: var(--primary);
-    color: white;
+    background: transparent;
+    color: var(--primary);
     border: none;
     width: 45px; height: 45px;
     border-radius: 4px;
-    font-size: 20px;
+    font-size: 24px;
     cursor: pointer;
 }
 .reveal {
