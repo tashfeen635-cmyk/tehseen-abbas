@@ -14,7 +14,7 @@ body {
     color: var(--dark);
     background: var(--white);
     line-height: 1.6;
-    overflow-x: hidden;
+    overflow-x: clip;
 }
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Oswald', sans-serif;
@@ -974,7 +974,7 @@ h1, h2, h3, h4, h5, h6 {
     top: 20px; right: 20px;
     z-index: 1100;
     background: transparent;
-    color: var(--primary);
+    color: #01469b;
     border: none;
     width: 45px; height: 45px;
     border-radius: 4px;
@@ -1007,8 +1007,40 @@ h1, h2, h3, h4, h5, h6 {
     .map-wrapper { margin-left: -30px; margin-right: -30px; }
 }
 @media (max-width: 768px) {
-    .hero { padding: 0 25px; min-height: 600px; }
-    .hero h1 { font-size: 40px; }
+    .hero {
+        width: 100%;
+        height: auto;
+        min-height: 640px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        align-items: flex-start;
+        padding: 48px 22px 40px;
+        overflow: hidden;
+    }
+    .hero-content {
+        width: 100%;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+    .hero .logo {
+        margin-left: 0;
+        align-self: flex-start;
+    }
+    .hero .logo-icon {
+        width: 200px;
+        max-width: 100%;
+        height: auto;
+        flex-shrink: 1;
+        margin-bottom: 8px;
+    }
+    .hero .logo .logo-icon img {
+        max-width: 100%;
+        height: auto;
+        width: auto;
+    }
+    .hero h1 { font-size: 40px; overflow-wrap: anywhere; }
+    .hero h1, .hero-subtitle, .hero-desc, .social-icons { max-width: 100%; }
     .exp-grid { grid-template-columns: 1fr; }
     .portfolio-grid { grid-template-columns: 1fr; }
     .skills-grid { grid-template-columns: 1fr; }
@@ -1028,6 +1060,11 @@ h1, h2, h3, h4, h5, h6 {
     .timeline-connector, .timeline-item:nth-child(even) .timeline-connector {
         left: 20px; right: auto; width: 15px;
     }
+}
+@media (max-width: 380px) {
+    .hero { padding: 32px 12px 28px; }
+    .hero h1 { font-size: 34px; }
+    .section-title { font-size: 32px; }
 }
 
 .portfolio-item { cursor: pointer; }
